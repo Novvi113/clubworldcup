@@ -25,8 +25,8 @@ from PIL import Image
 from matplotlib import colors as mcolors
 
 wtaimaged = Image.open("wtatransnew.png")
-st.set_page_config(page_title="WT Analysis - Match Visuals", layout="wide")
-st.title("WT Analysis - Match Visuals")
+st.set_page_config(page_title="Novvi113 Scout - Match Visuals", layout="wide")
+st.title("Novvi113 Scout - Match Visuals")
 schedule_df = pd.DataFrame()
 selected_description = None
 matchlink = None
@@ -924,7 +924,7 @@ if matchlink:
             events = pd.DataFrame()
             event_map = {}
         qualifiers = pd.read_excel("Opta Qualifiers.xlsx")
-        #teamdata = pd.read_csv(r"C:\Users\will-\OneDrive\Documents\WT Analysis\Scoresway\Team Log\teamlog.csv")
+        #teamdata = pd.read_csv(r"C:\Users\will-\OneDrive\Documents\Novvi113 Scout\Scoresway\Team Log\teamlog.csv")
         event_map = dict(zip(events["Code"], events["Event"]))
         qualifier_map = dict(zip(qualifiers["Code"], qualifiers["Qualifier"]))
         df = df.iloc[:, :100]

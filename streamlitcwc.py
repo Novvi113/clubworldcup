@@ -79,7 +79,7 @@ if selected_season != "-- Select Season --" and selected_competition != "-- Sele
         st.warning("No matching competition found.")
         
 headers = {
-    'Referer': 'https:///',
+    'Referer': 'https://www.scoresway.com/',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
 }
 
@@ -172,7 +172,7 @@ if matchlink:
 
     url = f'https://api.performfeeds.com/soccerdata/matchevent/ft1tiv1inq7v1sk3y9tv12yh5/{matchlink}?_rt=c&_lcl=en&_fmt=jsonp&sps=widgets&_clbk=W351bc3acc0d0c4e5b871ac99dfbfeb44bb58ba1dc'
     headers = {
-        'Referer': 'https:///',
+        'Referer': 'https://www.scoresway.com/',
         'User-Agent': 'Mozilla/5.0',
         'Access-Control-Allow-Origin': '*',
     }
@@ -201,7 +201,7 @@ if matchlink:
 
         url = f'https://api.performfeeds.com/soccerdata/matchevent/ft1tiv1inq7v1sk3y9tv12yh5/{matchlink}?_rt=c&_lcl=en&_fmt=jsonp&sps=widgets&_clbk=W351bc3acc0d0c4e5b871ac99dfbfeb44bb58ba1dc'
         headers = {
-            'Referer': 'https:///',
+            'Referer': 'https://www.scoresway.com/',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
             'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
             'sec-ch-ua-mobile': '?0',

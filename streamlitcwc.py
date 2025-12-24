@@ -79,7 +79,7 @@ if selected_season != "-- Select Season --" and selected_competition != "-- Sele
         st.warning("No matching competition found.")
         
 headers = {
-    'Referer': 'https://www.scoresway.com/',
+    'Referer': 'https:///',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36'
 }
 
@@ -172,7 +172,7 @@ if matchlink:
 
     url = f'https://api.performfeeds.com/soccerdata/matchevent/ft1tiv1inq7v1sk3y9tv12yh5/{matchlink}?_rt=c&_lcl=en&_fmt=jsonp&sps=widgets&_clbk=W351bc3acc0d0c4e5b871ac99dfbfeb44bb58ba1dc'
     headers = {
-        'Referer': 'https://www.scoresway.com/',
+        'Referer': 'https:///',
         'User-Agent': 'Mozilla/5.0',
         'Access-Control-Allow-Origin': '*',
     }
@@ -201,7 +201,7 @@ if matchlink:
 
         url = f'https://api.performfeeds.com/soccerdata/matchevent/ft1tiv1inq7v1sk3y9tv12yh5/{matchlink}?_rt=c&_lcl=en&_fmt=jsonp&sps=widgets&_clbk=W351bc3acc0d0c4e5b871ac99dfbfeb44bb58ba1dc'
         headers = {
-            'Referer': 'https://www.scoresway.com/',
+            'Referer': 'https:///',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
             'sec-ch-ua': '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
             'sec-ch-ua-mobile': '?0',
@@ -2375,7 +2375,7 @@ if matchlink:
                         teamlogoid = "1qtaiy11gswx327s0vkibf70n"  
                     if teamlogoid == "7ft9s47h5gbc35sbndoswkdwl":
                         teamlogoid = "1qtaiy11gswx327s0vkibf70n"  
-                    URL = f"https://omo.akamai.opta.net/image.php?h=www.scoresway.com&sport=football&entity=team&description=badges&dimensions=150&id={teamlogoid}"
+                    URL = f"https://omo.akamai.opta.net/image.php?h=&sport=football&entity=team&description=badges&dimensions=150&id={teamlogoid}"
                     # EFFIONG https://cdn5.wyscout.com/photos/players/public/g144828_100x130.png
                     teamimage = Image.open(urlopen(URL))
                     from PIL import Image
@@ -2601,8 +2601,8 @@ if matchlink:
                 awayteamlogo = "1qtaiy11gswx327s0vkibf70n"  
             if awayteamlogo == "7ft9s47h5gbc35sbndoswkdwl":
                 awayteamlogo = "1qtaiy11gswx327s0vkibf70n"  
-            HOMEURL = f"https://omo.akamai.opta.net/image.php?h=www.scoresway.com&sport=football&entity=team&description=badges&dimensions=150&id={hometeamlogo}"
-            AWAYURL = f"https://omo.akamai.opta.net/image.php?h=www.scoresway.com&sport=football&entity=team&description=badges&dimensions=150&id={awayteamlogo}"
+            HOMEURL = f"https://omo.akamai.opta.net/image.php?h=&sport=football&entity=team&description=badges&dimensions=150&id={hometeamlogo}"
+            AWAYURL = f"https://omo.akamai.opta.net/image.php?h=&sport=football&entity=team&description=badges&dimensions=150&id={awayteamlogo}"
         
             # Ensure RGBA so numpy arrays are (H, W, 4)
             homeimage = Image.open(urlopen(HOMEURL)).convert("RGBA")
@@ -3237,7 +3237,7 @@ if matchlink:
                         fig.text(
                         0.735 + 0.225 / 2,   # horizontally center under the image
                         0.7 - 0.02,        # a bit below the bottom of the image
-                        "Data via Opta",
+                        " ",
                         ha="center",
                         va="top",
                         fontsize=8,          # small text
@@ -3251,7 +3251,7 @@ if matchlink:
                                 teamlogoid = teamdata.loc[teamdata['name'] == teamname, 'id'].values[0]
                         
                                 # Build image URL
-                                URL = f"https://omo.akamai.opta.net/image.php?h=www.scoresway.com&sport=football&entity=team&description=badges&dimensions=150&id={teamlogoid}"
+                                URL = f"https://omo.akamai.opta.net/image.php?h=&sport=football&entity=team&description=badges&dimensions=150&id={teamlogoid}"
                         
                                 # Load image
                                 from urllib.request import urlopen

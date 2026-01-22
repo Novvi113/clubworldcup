@@ -2215,95 +2215,95 @@ if matchlink:
         })
 
        # ==========================================
-# НОВЫЕ ФУНКЦИИ ДЛЯ ELITE METRICS (NOVVI ADDON)
-# ==========================================
-
-def plot_xt_flow_chart(data, target_team, pitch_color, line_color):
-    """Рисует карту потока угрозы (xT Flow)"""
-    # Фильтруем данные: только успешные пасы выбранной команды с положительным xT
-    mask = (data['team_name'] == target_team) & \
-           (data['typeId'] == 'Pass') & \
-           (data['outcome'] == 'Successful') & \
-           (data['xT_value'] > 0)
+    # НОВЫЕ ФУНКЦИИ ДЛЯ ELITE METRICS (NOVVI ADDON)
+    # ==========================================
     
-    df_xt = data[mask].copy()
-
-    if df_xt.empty:
-        return None
-
-    # Рисуем поле
-    pitch = Pitch(pitch_type='opta', pitch_color=pitch_color, line_color=line_color)
-    fig, ax = pitch.draw(figsize=(10, 7))
-    fig.set_facecolor(pitch_color)
-
-    # Рисуем карту потока (Flow map)
-    # bins=(12, 8) делит поле на сетку. Стрелки показывают среднее направление угрозы.
-    pitch.flow(df_xt.x, df_xt.y, df_xt.end_x, df_xt.end_y,
-               bins=(12, 8), arrow_type='average', arrow_length=20,
-               color='#00ff85', ax=ax, width=3, headwidth=5)
-
-    ax.set_title(f"{target_team} - xT Creation Flow", color='white', fontsize=15, fontweight='bold')
-    return fig
-
-def plot_zone14_chart(data, target_team, pitch_color, line_color):
-    """Рисует пасы в Зону 14 (Ключевая зона перед штрафной)"""
-    pitch = Pitch(pitch_type='opta', pitch_color=pitch_color, line_color=line_color)
-    fig, ax = pitch.draw(figsize=(10, 7))
-    fig.set_facecolor(pitch_color)
-
-    # Зона 14 в координатах Opta (примерно)
-    # X: 65-85 (перед штрафной), Y: 35-65 (центр)
-    rect = plt.Rectangle((65, 35), 20, 30, color='#ff005a', alpha=0.15, zorder=1)
-    ax.add_patch(rect)
-    ax.text(75, 95, "ZONE 14 & HALF-SPACES", color='#ff005a', ha='center', fontweight='bold')
-
-    # Фильтруем пасы В эту зону
-    mask = (data['team_name'] == target_team) & \
-           (data['typeId'] == 'Pass') & \
-           (data['outcome'] == 'Successful') & \
-           (data['end_x'].between(60, 85)) & \
-           (data['end_y'].between(30, 70))
+    def plot_xt_flow_chart(data, target_team, pitch_color, line_color):
+        """Рисует карту потока угрозы (xT Flow)"""
+        # Фильтруем данные: только успешные пасы выбранной команды с положительным xT
+        mask = (data['team_name'] == target_team) & \
+               (data['typeId'] == 'Pass') & \
+               (data['outcome'] == 'Successful') & \
+               (data['xT_value'] > 0)
+        
+        df_xt = data[mask].copy()
     
-    z14_passes = data[mask]
-
-    if not z14_passes.empty:
-        # Рисуем пасы как кометы
-        pitch.lines(z14_passes.x, z14_passes.y, z14_passes.end_x, z14_passes.end_y,
-                    color='#ff005a', comet=True, alpha=0.6, lw=4, ax=ax)
-        pitch.scatter(z14_passes.end_x, z14_passes.end_y, color='#ff005a', s=50, ax=ax)
-
-    return fig, len(z14_passes)
-
-def plot_defensive_block(data, target_team, pitch_color, line_color):
-    """Рисует тепловую карту защитных действий"""
-    # Фильтруем: Отборы, Перехваты, Фолы
-    def_actions = ['Tackle', 'Interception', 'Ball recovery', 'Foul', 'Blocked Pass', 'Challenge']
-    mask = (data['team_name'] == target_team) & (data['typeId'].isin(def_actions))
-    df_def = data[mask]
-
-    pitch = Pitch(pitch_type='opta', pitch_color=pitch_color, line_color=line_color)
-    fig, ax = pitch.draw(figsize=(10, 7))
-    fig.set_facecolor(pitch_color)
-
-    if not df_def.empty:
-        # Рисуем KDE Heatmap (плотность)
-        # levels=10 - количесто уровней, thresh - убирает шум
-        sns.kdeplot(
-            x=df_def['x'], y=df_def['y'],
-            fill=True, alpha=0.6, cmap='mako', ax=ax, levels=10, thresh=0.1
-        )
+        if df_xt.empty:
+            return None
+    
+        # Рисуем поле
+        pitch = Pitch(pitch_type='opta', pitch_color=pitch_color, line_color=line_color)
+        fig, ax = pitch.draw(figsize=(10, 7))
+        fig.set_facecolor(pitch_color)
+    
+        # Рисуем карту потока (Flow map)
+        # bins=(12, 8) делит поле на сетку. Стрелки показывают среднее направление угрозы.
+        pitch.flow(df_xt.x, df_xt.y, df_xt.end_x, df_xt.end_y,
+                   bins=(12, 8), arrow_type='average', arrow_length=20,
+                   color='#00ff85', ax=ax, width=3, headwidth=5)
+    
+        ax.set_title(f"{target_team} - xT Creation Flow", color='white', fontsize=15, fontweight='bold')
+        return fig
+    
+    def plot_zone14_chart(data, target_team, pitch_color, line_color):
+        """Рисует пасы в Зону 14 (Ключевая зона перед штрафной)"""
+        pitch = Pitch(pitch_type='opta', pitch_color=pitch_color, line_color=line_color)
+        fig, ax = pitch.draw(figsize=(10, 7))
+        fig.set_facecolor(pitch_color)
+    
+        # Зона 14 в координатах Opta (примерно)
+        # X: 65-85 (перед штрафной), Y: 35-65 (центр)
+        rect = plt.Rectangle((65, 35), 20, 30, color='#ff005a', alpha=0.15, zorder=1)
+        ax.add_patch(rect)
+        ax.text(75, 95, "ZONE 14 & HALF-SPACES", color='#ff005a', ha='center', fontweight='bold')
+    
+        # Фильтруем пасы В эту зону
+        mask = (data['team_name'] == target_team) & \
+               (data['typeId'] == 'Pass') & \
+               (data['outcome'] == 'Successful') & \
+               (data['end_x'].between(60, 85)) & \
+               (data['end_y'].between(30, 70))
         
-        # Средняя линия обороны
-        avg_depth = df_def['x'].mean()
-        pitch.lines(avg_depth, 0, avg_depth, 100, color='cyan', ls='--', ax=ax)
-        ax.text(avg_depth+2, 5, f"Avg Def Line: {avg_depth:.1f}m", color='cyan')
-        
-    ax.set_title(f"{target_team} - Defensive Territory", color='white', fontsize=15)
-    return fig
-
-# ==========================================
-# КОНЕЦ НОВЫХ ФУНКЦИЙ
-# ========================================== 
+        z14_passes = data[mask]
+    
+        if not z14_passes.empty:
+            # Рисуем пасы как кометы
+            pitch.lines(z14_passes.x, z14_passes.y, z14_passes.end_x, z14_passes.end_y,
+                        color='#ff005a', comet=True, alpha=0.6, lw=4, ax=ax)
+            pitch.scatter(z14_passes.end_x, z14_passes.end_y, color='#ff005a', s=50, ax=ax)
+    
+        return fig, len(z14_passes)
+    
+    def plot_defensive_block(data, target_team, pitch_color, line_color):
+        """Рисует тепловую карту защитных действий"""
+        # Фильтруем: Отборы, Перехваты, Фолы
+        def_actions = ['Tackle', 'Interception', 'Ball recovery', 'Foul', 'Blocked Pass', 'Challenge']
+        mask = (data['team_name'] == target_team) & (data['typeId'].isin(def_actions))
+        df_def = data[mask]
+    
+        pitch = Pitch(pitch_type='opta', pitch_color=pitch_color, line_color=line_color)
+        fig, ax = pitch.draw(figsize=(10, 7))
+        fig.set_facecolor(pitch_color)
+    
+        if not df_def.empty:
+            # Рисуем KDE Heatmap (плотность)
+            # levels=10 - количесто уровней, thresh - убирает шум
+            sns.kdeplot(
+                x=df_def['x'], y=df_def['y'],
+                fill=True, alpha=0.6, cmap='mako', ax=ax, levels=10, thresh=0.1
+            )
+            
+            # Средняя линия обороны
+            avg_depth = df_def['x'].mean()
+            pitch.lines(avg_depth, 0, avg_depth, 100, color='cyan', ls='--', ax=ax)
+            ax.text(avg_depth+2, 5, f"Avg Def Line: {avg_depth:.1f}m", color='cyan')
+            
+        ax.set_title(f"{target_team} - Defensive Territory", color='white', fontsize=15)
+        return fig
+    
+    # ==========================================
+    # КОНЕЦ НОВЫХ ФУНКЦИЙ
+    # ========================================== 
         tab1, tab2, tab3, tab4, tab5 = st.tabs(["Player Overview", "Match Momentum", "Average Positions", "Custom Player Actions", "New Metrics"])
 
         
@@ -3489,63 +3489,71 @@ def plot_defensive_block(data, target_team, pitch_color, line_color):
                 plt.close(fig)
                 plt.close('all')
                 
+        # Убедись, что слово with стоит на одной линии с with tab4 выше!
         with tab5:
-        st.header("Elite Tactical Analysis (Team Level)")
-        
-        if 'team_name' in df.columns:
-            # 1. Выбор команды
-            available_teams = df['team_name'].unique()
-            target_team = st.selectbox("Select Team to Analyze", available_teams, key='elite_team_select')
+            st.header("Elite Tactical Analysis (Team Level)")
             
-            # Настройка цветов (если переменные не подтянулись, ставим дефолт)
-            p_color = PitchColor if 'PitchColor' in locals() else '#0e1117'
-            l_color = PitchLineColor if 'PitchLineColor' in locals() else '#555555'
+            if 'team_name' in df.columns:
+                # 1. Выбор команды
+                available_teams = sorted(df['team_name'].dropna().unique())
+                target_team = st.selectbox("Select Team to Analyze", available_teams, key='elite_team_select')
+                
+                # Цвета (безопасное получение из сессии или дефолт)
+                import streamlit as st
+                p_color = st.session_state.get("PitchColor", "#0e1117")
+                l_color = st.session_state.get("PitchLineColor", "#555555")
 
-            st.markdown("---")
-            
-            # 2. Ряд с графиками
-            col_elite_1, col_elite_2 = st.columns(2)
-            
-            with col_elite_1:
-                st.subheader("🌊 Threat Flow (xT)")
-                # Функция xT Flow Chart
-                try:
-                    mask_xt = (df['team_name'] == target_team) & (df['typeId'] == 'Pass') & (df['outcome'] == 'Successful') & (df['xT_value'] > 0)
-                    df_xt = df[mask_xt].copy()
-                    
-                    if not df_xt.empty:
-                        pitch = Pitch(pitch_type='opta', pitch_color=p_color, line_color=l_color)
-                        fig_xt, ax_xt = pitch.draw(figsize=(10, 7))
-                        fig_xt.set_facecolor(p_color)
+                st.markdown("---")
+                
+                # 2. Ряд с графиками
+                col_elite_1, col_elite_2 = st.columns(2)
+                
+                with col_elite_1:
+                    st.subheader("🌊 Threat Flow (xT)")
+                    # Функция xT Flow Chart
+                    try:
+                        mask_xt = (df['team_name'] == target_team) & (df['typeId'] == 'Pass') & (df['outcome'] == 'Successful') & (df['xT_value'] > 0)
+                        df_xt = df[mask_xt].copy()
                         
-                        pitch.flow(df_xt.x, df_xt.y, df_xt.end_x, df_xt.end_y,
-                                   bins=(12, 8), arrow_type='average', arrow_length=20,
-                                   color='#00ff85', ax=ax_xt, width=3, headwidth=5)
-                        st.pyplot(fig_xt)
-                        plt.close(fig_xt)
-                    else:
-                        st.warning("Not enough xT data.")
-                except Exception as e:
-                    st.error(f"Error plotting Flow: {e}")
+                        if not df_xt.empty:
+                            # Создаем фигуру здесь
+                            pitch = Pitch(pitch_type='opta', pitch_color=p_color, line_color=l_color)
+                            fig_xt, ax_xt = pitch.draw(figsize=(10, 7))
+                            fig_xt.set_facecolor(p_color)
+                            
+                            # Рисуем карту потока одной строкой
+                            pitch.flow(df_xt.x, df_xt.y, df_xt.end_x, df_xt.end_y, bins=(12, 8), arrow_type='average', arrow_length=20, color='#00ff85', ax=ax_xt, width=3, headwidth=5)
+                            
+                            st.pyplot(fig_xt)
+                            plt.close(fig_xt)
+                        else:
+                            st.warning("Not enough xT data for Flow Chart.")
+                    except Exception as e:
+                        st.error(f"Error plotting Flow: {e}")
 
-            with col_elite_2:
-                st.subheader("🛡️ Defensive Territory")
-                # Функция теповой карты защиты
-                try:
-                    def_actions = ['Tackle', 'Interception', 'Ball recovery', 'Foul']
-                    mask_def = (df['team_name'] == target_team) & (df['typeId'].isin(def_actions))
-                    df_def = df[mask_def]
-                    
-                    if not df_def.empty:
-                        pitch = Pitch(pitch_type='opta', pitch_color=p_color, line_color=l_color)
-                        fig_def, ax_def = pitch.draw(figsize=(10, 7))
-                        fig_def.set_facecolor(p_color)
+                with col_elite_2:
+                    st.subheader("🛡️ Defensive Territory")
+                    # Функция тепловой карты
+                    try:
+                        def_actions = ['Tackle', 'Interception', 'Ball recovery', 'Foul']
+                        mask_def = (df['team_name'] == target_team) & (df['typeId'].isin(def_actions))
+                        df_def = df[mask_def]
                         
-                        import seaborn as sns
-                        sns.kdeplot(x=df_def['x'], y=df_def['y'], fill=True, alpha=0.6, cmap='mako', ax=ax_def, levels=10, thresh=0.1)
-                        st.pyplot(fig_def)
-                        plt.close(fig_def)
-                    else:
-                        st.warning("Not enough defensive actions.")
-                except Exception as e:
-                    st.error(f"Error plotting Defense: {e}")
+                        if not df_def.empty:
+                            pitch = Pitch(pitch_type='opta', pitch_color=p_color, line_color=l_color)
+                            fig_def, ax_def = pitch.draw(figsize=(10, 7))
+                            fig_def.set_facecolor(p_color)
+                            
+                            sns.kdeplot(x=df_def['x'], y=df_def['y'], fill=True, alpha=0.6, cmap='mako', ax=ax_def, levels=10, thresh=0.1)
+                            
+                            # Линия обороны
+                            avg_depth = df_def['x'].mean()
+                            pitch.lines(avg_depth, 0, avg_depth, 100, color='cyan', ls='--', ax=ax_def)
+                            ax_def.text(avg_depth+2, 5, f"Avg Def Line: {avg_depth:.1f}m", color='cyan')
+
+                            st.pyplot(fig_def)
+                            plt.close(fig_def)
+                        else:
+                            st.warning("Not enough defensive actions.")
+                    except Exception as e:
+                        st.error(f"Error plotting Defense: {e}")
